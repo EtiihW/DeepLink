@@ -1,0 +1,808 @@
+> анатомический прикол.:
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortLink - Сокращение ссылок</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #d5f4e6;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --gray-bg: #f9f9f9;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--gray-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary-green);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .logo span {
+            color: var(--primary-green);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--white) 70%, var(--gray-bg) 100%);
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        /* URL Shortener Form */
+        .shortener-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-green);
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+> анатомический прикол.:
+.btn {
+            display: inline-block;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-green);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Result Section */
+        .result-container {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-box {
+            background-color: var(--light-green);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .result-info h4 {
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .result-info p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .short-url {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-green);
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .copy-btn:hover {
+            background-color: var(--dark-green);
+        }
+
+        .new-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .new-btn:hover {
+            background-color: var(--light-green);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h3 {
+            font-size: 32px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--gray-bg);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.1);
+        }
+
+        .feature-icon {
+            background-color: var(--light-green);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .feature-icon i {
+            font-size: 30px;
+            color: var(--primary-green);
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+        }
+
+        /* Database Section */
+        .database-section {
+            padding: 80px 0;
+            background-color: var(--gray-bg);
+        }
+
+        .db-info {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+> анатомический прикол.:
+.db-info h4 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .db-info p {
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: var(--primary-green);
+        }
+
+        .footer-about p {
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .footer-links h4, .footer-contact h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-green);
+        }
+
+        .footer-contact p {
+            color: #bdc3c7;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-contact i {
+            color: var(--primary-green);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero h2 {
+                font-size: 32px;
+            }
+            
+            .shortener-container {
+                padding: 25px;
+            }
+            
+            .result-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .action-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-link"></i>
+                <h1>Short<span>Link</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#features">Возможности</a></li>
+                    <li><a href="#database">База данных</a></li>
+                    <li><a href="#instructions">Инструкция</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Сократите вашу ссылку за секунды</h2>
+            <p>Бесплатный сервис для сокращения длинных URL-адресов. Создавайте короткие, запоминающиеся ссылки и отслеживайте их эффективность.</p>
+
+> анатомический прикол.:
+<!-- URL Shortener Form -->
+            <div class="shortener-container">
+                <div class="form-group">
+                    <label for="url-input">Введите длинный URL-адрес</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-link"></i>
+                        <input type="url" id="url-input" placeholder="https://example.com/very-long-url-that-needs-to-be-shortened">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="custom-alias">Пользовательский псевдоним (опционально)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-tag"></i>
+                        <input type="text" id="custom-alias" placeholder="my-link">
+                    </div>
+                    <p style="font-size: 14px; color: var(--text-light); margin-top: 5px;">Будет использовано для создания короткой ссылки: yourdomain.com/my-link</p>
+                </div>
+                
+                <button class="btn" id="shorten-btn">
+                    <i class="fas fa-magic"></i> Сократить ссылку
+                </button>
+                
+                <!-- Result Section -->
+                <div class="result-container" id="result-container">
+                    <div class="result-box">
+                        <div class="result-info">
+                            <h4>Ваша короткая ссылка готова!</h4>
+                            <p>Скопируйте ссылку ниже и поделитесь ею</p>
+                            <div class="short-url" id="short-url">https://short.link/abc123</div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn copy-btn" id="copy-btn">
+                                <i class="fas fa-copy"></i> Копировать
+                            </button>
+                            <button class="action-btn new-btn" id="new-btn">
+                                <i class="fas fa-plus"></i> Новая ссылка
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h3>Почему выбирают ShortLink?</h3>
+                <p>Наш сервис предлагает все необходимые функции для эффективного сокращения и управления ссылками</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Мгновенное сокращение</h4>
+                    <p>Сокращайте ссылки в реальном времени без задержек. Получайте короткий URL сразу после отправки формы.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Аналитика и отслеживание</h4>
+                    <p>Получайте статистику по кликам, географическому расположению пользователей и устройствам.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h4>Надежное хранение</h4>
+                    <p>Все ваши ссылки безопасно хранятся в базе данных с регулярным резервным копированием.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+> анатомический прикол.:
+<!-- Database Section -->
+    <section class="database-section" id="database">
+        <div class="container">
+            <div class="section-title">
+                <h3>Интеграция с базой данных</h3>
+                <p>Структура для подключения вашей базы данных</p>
+            </div>
+            
+            <div class="db-info">
+                <h4>Подготовленная структура для БД</h4>
+                <p>Сайт готов к подключению базы данных. Ниже представлена примерная структура таблицы для хранения сокращенных ссылок, которую вы можете адаптировать под свою СУБД (MySQL, PostgreSQL, MongoDB и т.д.)</p>
+                
+                <div class="code-block">
+                    <pre>
+-- SQL структура таблицы для хранения ссылок
+CREATE TABLE shortened_urls (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    original_url TEXT NOT NULL,
+    short_code VARCHAR(50) UNIQUE NOT NULL,
+    custom_alias VARCHAR(100) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    clicks INT DEFAULT 0,
+    user_ip VARCHAR(45),
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Индексы для оптимизации запросов
+CREATE INDEX idx_short_code ON shortened_urls(short_code);
+CREATE INDEX idx_created_at ON shortened_urls(created_at);
+                    </pre>
+                </div>
+                
+                <p style="margin-top: 20px;">Для подключения базы данных необходимо:</p>
+                <ol style="color: var(--text-light); margin-left: 20px; margin-top: 10px;">
+                    <li>Создать базу данных в выбранной СУБД</li>
+                    <li>Создать таблицу по указанной выше структуре</li>
+                    <li>Настроить подключение в backend-части сайта (файл db_connection.php или аналогичный)</li>
+                    <li>Реализовать API endpoints для создания и перенаправления ссылок</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructions Section -->
+    <section class="features" id="instructions">
+        <div class="container">
+            <div class="section-title">
+                <h3>Инструкция по установке и использованию</h3>
+                <p>Подробное руководство по настройке и работе с сайтом для сокращения ссылок</p>
+            </div>
+            
+            <div class="db-info">
+                <h4>Полная инструкция по развертыванию проекта</h4>
+                
+                <h5 style="margin: 25px 0 15px; color: var(--text-dark);">1. Установка и настройка</h5>
+                <ol style="color: var(--text-light); margin-left: 20px; margin-bottom: 25px;">
+                    <li><strong>Разместите файлы на сервере:</strong> Загрузите все файлы сайта на ваш веб-сервер (Apache, Nginx и т.д.)</li>
+                    <li><strong>Настройте базу данных:</strong> Создайте БД и таблицу по структуре выше</li>
+                    <li><strong>Настройте подключение к БД:</strong> Создайте файл config.php с данными для подключения к вашей базе данных</li>
+                    <li><strong>Настройте домен:</strong> При необходимости настройте домен или поддомен для сервиса</li>
+                </ol>
+                
+                <h5 style="margin: 25px 0 15px; color: var(--text-dark);">2. Backend интеграция</h5>
+                <ol style="color: var(--text-light); margin-left: 20px; margin-bottom: 25px;">
+                    <li><strong>Создайте API endpoints:</strong> Реализуйте обработчики для:
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Создания коротких ссылок (POST /api/shorten)</li>
+                            <li>Перенаправления по коротким ссылкам (GET /{short_code})</li>
+                            <li>Получения статистики (GET /api/stats/{short_code})</li>
+                        </ul>
+                    </li>
+                    <li><strong>Реализуйте логику генерации коротких кодов:</strong> Можно использовать хеширование или случайные строки</li>
+
+> анатомический прикол.:
+<li><strong>Добавьте валидацию URL:</strong> Проверяйте корректность вводимых ссылок</li>
+                    <li><strong>Реализуйте подсчет кликов:</strong> Увеличивайте счетчик при каждом переходе по короткой ссылке</li>
+                </ol>
+                
+                <h5 style="margin: 25px 0 15px; color: var(--text-dark);">3. Интеграция фронтенда с бэкендом</h5>
+                <ol style="color: var(--text-light); margin-left: 20px; margin-bottom: 25px;">
+                    <li><strong>Обновите JavaScript код:</strong> В функции shortenUrl() замените mock-реализацию на реальный AJAX-запрос к вашему API</li>
+                    <li><strong>Настройте обработку ошибок:</strong> Добавьте уведомления для пользователя при ошибках</li>
+                    <li><strong>Добавьте загрузку статистики:</strong> Реализуйте загрузку данных о кликах по ссылкам</li>
+                </ol>
+                
+                <h5 style="margin: 25px 0 15px; color: var(--text-dark);">4. Дополнительные настройки</h5>
+                <ol style="color: var(--text-light); margin-left: 20px; margin-bottom: 25px;">
+                    <li><strong>Настройте редирект:</strong> Создайте .htaccess (для Apache) или конфиг (для Nginx) для обработки коротких ссылок</li>
+                    <li><strong>Добавьте SSL сертификат:</strong> Для безопасности используйте HTTPS</li>
+                    <li><strong>Настройте резервное копирование:</strong> Организуйте регулярное резервное копирование базы данных</li>
+                    <li><strong>Добавьте аналитику:</strong> Подключите Google Analytics или другую систему аналитики</li>
+                </ol>
+                
+                <h5 style="margin: 25px 0 15px; color: var(--text-dark);">5. Использование сайта</h5>
+                <ol style="color: var(--text-light); margin-left: 20px;">
+                    <li><strong>Сокращение ссылки:</strong> Вставьте длинный URL в поле ввода и нажмите "Сократить ссылку"</li>
+                    <li><strong>Пользовательский псевдоним:</strong> При желании укажите свой вариант короткой ссылки</li>
+                    <li><strong>Копирование и использование:</strong> Скопируйте полученную короткую ссылку и используйте ее где нужно</li>
+                    <li><strong>Статистика:</strong> После подключения бэкенда вы сможете просматривать статистику переходов</li>
+                </ol>
+                
+                <div class="code-block" style="margin-top: 30px;">
+                    <pre>
+// Пример конфигурационного файла config.php
+&lt;?php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'shortlink_db');
+define('DB_USER', 'username');
+define('DB_PASS', 'password');
+define('BASE_URL', 'https://yourdomain.com/');
+define('API_KEY', 'your_secret_api_key_here'); // Для защиты API
+?&gt;
+
+// Пример обработчика создания короткой ссылки
+&lt;?php
+require_once 'config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $originalUrl = $data['url'] ?? '';
+    $customAlias = $data['alias'] ?? '';
+    
+    // Валидация URL
+    if (!filter_var($originalUrl, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Некорректный URL']);
+        exit;
+    }
+    
+    // Генерация короткого кода
+    $shortCode = $customAlias ?: generateShortCode()`;
+    
+    // Сохранение в БД и возврат результата
+    // ... ваш код для работы с БД ...
+}
+?&gt;
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">Deep<span>Link</span></div>
+
+> анатомический прикол.:
+<p>Бесплатный сервис для сокращения длинных URL-адресов. Создавайте короткие, запоминающиеся ссылки и делитесь ими с миром.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Быстрые ссылки</h4>
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#features">Возможности</a></li>
+                        <li><a href="#database">База данных</a></li>
+                        <li><a href="#instructions">Инструкция</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-envelope"></i> support@deeplink.example.com</p>
+                    <p><i class="fas fa-globe"></i> https://deeplink.example.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Москва, Россия</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 DeepLink. Все права защищены. | Сайт для сокращения ссылок</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM элементы
+        const urlInput = document.getElementById('url-input');
+        const customAlias = document.getElementById('custom-alias');
+        const shortenBtn = document.getElementById('shorten-btn');
+        const resultContainer = document.getElementById('result-container');
+        const shortUrlElement = document.getElementById('short-url');
+        const copyBtn = document.getElementById('copy-btn');
+        const newBtn = document.getElementById('new-btn');
+        
+        // Генерация случайного короткого кода
+        function generateShortCode(length = 6) {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // Функция сокращения ссылки
+        function shortenUrl() {
+            const originalUrl = urlInput.value.trim();
+            const alias = customAlias.value.trim();
+            
+            // Валидация URL
+            if (!originalUrl) {
+                alert('Пожалуйста, введите URL для сокращения');
+                urlInput.focus();
+                return;
+            }
+            
+            try {
+                new URL(originalUrl);
+            } catch (e) {
+                alert('Пожалуйста, введите корректный URL (например, https://example.com)');
+                urlInput.focus();
+                return;
+            }
+            
+            // В реальном приложении здесь будет AJAX-запрос к вашему бэкенду
+            // Для демонстрации используем mock-данные
+            
+            // Генерация короткого кода
+            const shortCode = alias || generateShortCode();
+            const shortUrl = `https://short.link/${shortCode}`;
+            
+            // Показываем результат
+            shortUrlElement.textContent = shortUrl;
+            resultContainer.style.display = 'block';
+            
+            // Прокручиваем к результату
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Сохраняем в localStorage для демонстрации
+            const linkData = {
+                originalUrl,
+                shortUrl,
+                shortCode,
+                alias: alias || '',
+                createdAt: new Date().toISOString()
+            };
+            
+            // В реальном приложении здесь будет сохранение в вашу БД
+            console.log('Ссылка для сохранения в БД:', linkData);
